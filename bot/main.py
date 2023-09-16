@@ -1,16 +1,16 @@
 from binanceapi.binanceapi import BinanceAPI
 from graph.candle import Graph
 from model.lrmodel import LinearModel
+from positon.psymbol import Psymbol
 import matplotlib.pyplot as plt
 from model.loadmodel import LoadModel
 from model.basemodel import BaseModel
 from bot import Bot
-import time
+from log.log import Log
 
 print('to display commands, type **help')
+
 bncapi = BinanceAPI('GMT')
-kli = bncapi.GetHistoricalKlines('ETHBUSD')
-x = kli.iloc[364,0:4].values.reshape(1,-1)
 while True:
     command = input('->')
     commandSplit = command.split('-')
@@ -22,7 +22,7 @@ while True:
     if commandSplit[0] == "**drawgraph":
         try:
             klines = bncapi.GetHistoricalKlines(commandSplit[1])
-            gr = Graph(klines)
+            gr = Graph(klines, commandSplit[1])
             gr.Draw()
         except:
             print('unknown symbol')
@@ -44,23 +44,9 @@ while True:
         symbol = commandSplit[1]
         klines = bncapi.GetHistoricalKlines(symbol=symbol)
         print(klines)
-"""
-bncapi = BinanceAPI('GMT')
-kli = bncapi.GetHistoricalKlines('ETHBUSD')
-print(kli.iloc[0:364,:])
-input=kli.iloc[0:364,0:4]
-output=kli.iloc[0:364,4:5]
-lr = LinearModel(symbol='ETHBUSD', input=input, output=output)
-lr.CreateModel()
-lr.SaveModel()
-lm = LoadModel('ETHBUSD', 'LR')
-print(lm.Model.Predict(kli.iloc[364,0:4].values.reshape(1,-1)))
-gr = Graph(kli)
-gr.Draw()
-
-print(lr.Predict(kli.iloc[364,0:4].values.reshape(1,-1)))
-
-plt.plot(kli.iloc[0:364,0:1], kli.iloc[0:364,4:5])
-plt.plot(kli.iloc[0:364, 0:1], lr.Predict(kli.iloc[0:364,0:4].values))
-plt.show()
-"""
+    if commandSplit[0] == "**help":
+        print("**drawgraph-SYMBOL (example->drawgraph-ETHBUSD) shows candle stick graph of symbol")
+        print("**learn-SYMBOL (example->learn-ETHBUSD) learn model of symbol")
+        print("**runbot to run bot(symbols must be learnt before use)")
+        print("**data-SYMBOL(example->**data-ETHBUSD) shows klines of symbol in dataframe")
+        print("**exit kills program")

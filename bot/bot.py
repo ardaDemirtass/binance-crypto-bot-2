@@ -5,6 +5,7 @@ from binanceapi.binanceapi import BinanceAPI
 from positon.psymbol import Psymbol
 from positon.position import Position
 import time
+from log.log import Log
 
 class Bot:
     def __init__(self, symbols):
@@ -15,6 +16,7 @@ class Bot:
         self.__PSymbol : Psymbol
         self.__Position : Position
         self.__BinanceAPI = BinanceAPI('GMT')
+        self.__Log : Log
 
     def __LoadModels(self):
         for symbol in self.__Symbols:
@@ -40,6 +42,8 @@ class Bot:
                 self.__Position = Position(self.__PSymbol)
                 self.__Position.EnterPosition()
                 self.__InPosition = True
+                self.__Log = Log(self.__PSymbol)
+                self.__Log.EnterLog()
                 break
 
     def __ManagePosition(self):
@@ -47,10 +51,12 @@ class Bot:
         if currentPrice >= self.__Position.PSymbol.TargetPrice:
             self.__Position.ExitPosition("target")
             self.__InPosition = False
+            self.__Log.ExitLog(currentPrice)
 
         if currentPrice < self.__Position.PSymbol.StopPrice:
             self.__Position.ExitPosition("stop")
             self.__InPosition = False
+            self.__Log.ExitLog(currentPrice)
 
         print("*****")
         print(f"symbol : {self.__Position.PSymbol.Symbol}")

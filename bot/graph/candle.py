@@ -2,8 +2,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 class Graph:
-    def __init__(self, df : pd.DataFrame):
+    def __init__(self, df : pd.DataFrame, symbol : str):
         self.__Df = df
+        self.__Symbol = symbol
 
     def Draw(self):
         plt.figure()
@@ -21,6 +22,6 @@ class Graph:
         plt.bar(down.index,down.close-down.open,width,bottom=down.open,color=col2)
         plt.bar(down.index,down.high-down.open,width2,bottom=down.open,color=col2)
         plt.bar(down.index,down.low-down.close,width2,bottom=down.close,color=col2)
-
+        plt.suptitle(self.__Symbol)
         plt.xticks(rotation=45, ha='right')
         plt.show()
