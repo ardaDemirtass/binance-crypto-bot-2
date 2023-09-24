@@ -44,9 +44,14 @@ while True:
         symbol = commandSplit[1]
         klines = bncapi.GetHistoricalKlines(symbol=symbol)
         print(klines)
+    if commandSplit[0] == "**info":
+        infoSymbol = commandSplit[1]
+        lm = LoadModel(infoSymbol, 'LR')
+        print(lm.Model.Info)
     if commandSplit[0] == "**help":
         print("**drawgraph-SYMBOL (example->drawgraph-ETHBUSD) shows candle stick graph of symbol")
         print("**learn-SYMBOL (example->learn-ETHBUSD) learn model of symbol")
         print("**runbot to run bot(symbols must be learnt before use)")
         print("**data-SYMBOL(example->**data-ETHBUSD) shows klines of symbol in dataframe")
+        print("**info-SYMBOL to get info about symbol")
         print("**exit kills program")

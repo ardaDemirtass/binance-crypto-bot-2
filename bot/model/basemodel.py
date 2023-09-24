@@ -75,6 +75,11 @@ class BaseModel(ABC):
     @property
     def Output(self):
         return self.__Output
+    
+    @property
+    def Info(self):
+        conc = pd.concat([self.__Input.iloc[0:364], self.__Output[0:364]], axis=1)
+        return conc
 
     @abstractmethod
     def Predict(self):
